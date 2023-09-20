@@ -1,0 +1,16 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" >
+    <Dialog id="idDialog" title="{itemModel>/ProductName}" type="Message">
+    <content>
+    <VBox>        
+        <Text text="Precio por unidad: {itemModel>/UnitPrice}" />
+        <Text text="Unidades en stock: {itemModel>/UnitsInStock}" />
+    </VBox>        
+    </content>
+    <footer>
+    <OverflowToolbar >
+    <ToolbarSpacer />
+    <Button text="Cerrar" width="30%" press="onCloseDialog" type="Emphasized" class="sapUiSmallMarginBottom sapUiSmallMarginTop"></Button>
+    </OverflowToolbar>
+    </footer>
+    </Dialog>
+</core:FragmentDefinition>

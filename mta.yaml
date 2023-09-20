@@ -1,0 +1,92 @@
+_schema-version: "3.2"
+ID: ejemploDestination
+version: 0.0.1
+modules:
+- name: ejemploDestination-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: ejemploDestination-destination-service
+    parameters:
+      content-target: true
+  - name: ejemploDestination_html_repo_host
+    parameters:
+      service-key:
+        name: ejemploDestination_html_repo_host-key
+  - name: uaa_ejemploDestination
+    parameters:
+      service-key:
+        name: uaa_ejemploDestination-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: ejemploDestination_ejemploDestination_html_repo_host
+          ServiceInstanceName: ejemploDestination-html5-app-host-service
+          ServiceKeyName: ejemploDestination_html_repo_host-key
+          sap.cloud.service: ejemploDestination
+        - Authentication: OAuth2UserTokenExchange
+          Name: ejemploDestination_uaa_ejemploDestination
+          ServiceInstanceName: ejemploDestination-xsuaa-service
+          ServiceKeyName: uaa_ejemploDestination-key
+          sap.cloud.service: ejemploDestination
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: ejemploDestination-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: ejemploDestination_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - ejemplodestinatiom.zip
+      name: ejemplodestinatiom
+      target-path: resources/
+- name: ejemplodestinatiom
+  type: html5
+  path: ejemplo_destinatiom
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: ejemploDestination-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: ejemploDestination-destination-service
+    service-plan: lite
+- name: ejemploDestination_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: ejemploDestination-html5-app-host-service
+    service-plan: app-host
+- name: uaa_ejemploDestination
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: ejemploDestination-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo

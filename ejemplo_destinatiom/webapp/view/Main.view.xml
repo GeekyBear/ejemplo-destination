@@ -1,0 +1,35 @@
+<mvc:View
+    controllerName="ejemplodestinatiom.controller.Main"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns="sap.m">
+	<VBox>		
+		<Panel headerText="Tabla">
+			<Table id="idProductsTable"
+			inset="false"
+			items="{
+				path: 'productModel>/',
+				sorter: {
+					path: 'ProductName'
+				}
+			}">
+			<columns>
+				<Column
+					width="12em">
+					<Text text="ProductName" />
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem  type="Active" press="onItemPress" vAlign="Middle"> 
+					<cells>
+						<ObjectIdentifier
+							title="{productModel>ProductName}"
+							text="{productModel>ProductName}"/>
+						
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+		</Panel>
+	</VBox>
+</mvc:View>
